@@ -3,7 +3,6 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Shapes;
-using System.Windows.Threading;
 
 namespace WpfCrossLightModel
 {
@@ -13,7 +12,6 @@ namespace WpfCrossLightModel
     public partial class MainWindow : Window
     {
         private TrafficLights trafficLights;
-        private DispatcherTimer timer;
         private int[] durations;
         public MainWindow()
         {
@@ -21,20 +19,15 @@ namespace WpfCrossLightModel
             DurationBox.Visibility = Visibility.Hidden;
             trafficLights = new TrafficLights(new Ellipse[] { RedLamp, YellowLamp, GreenLamp });
             durations = new int[] { 5, 2, 5 };
-            timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromSeconds(trafficLights.GetDuration());
-            timer.Tick += timer_Tick;
         }
-
         private void ManualButton_Click(object sender, RoutedEventArgs e)
         {
-            timer.Stop();
+            trafficLights.Stop();
             trafficLights.ChangeLamp();
         }
-
         private void AutoButton_Click(object sender, RoutedEventArgs e)
         {
-            timer.Stop();
+            trafficLights.Stop();
             DurationBox.Visibility = Visibility.Visible;
             RedTextBox.Focus();
         }
@@ -47,18 +40,12 @@ namespace WpfCrossLightModel
             {
                 trafficLights.SetDurations(durations);
                 DurationBox.Visibility = Visibility.Hidden;
-                timer.Start();
+                trafficLights.Run();
             }
         }
-
         private void QuitButton_Click(object sender, RoutedEventArgs e)
         {
             Close();
-        }
-        private void timer_Tick(object sender, EventArgs e)
-        {
-            trafficLights.ChangeLamp();
-            timer.Interval = TimeSpan.FromSeconds(trafficLights.GetDuration());
         }
         private bool GetNumber(TextBox box, out int number)
         {
@@ -77,7 +64,6 @@ namespace WpfCrossLightModel
             }
             return false;
         }
-
         private void NumberValidationTextBox(object sender, System.Windows.Input.TextCompositionEventArgs e)
         {
             Regex regex = new Regex("[^0-9]+");

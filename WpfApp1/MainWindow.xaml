@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp1"
         mc:Ignorable="d"
-        Title="Traffic Lights Model" Height="475" Width="342">
+        Title="Traffic Lights Model by C#" Height="475" Width="342">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="180"/>
